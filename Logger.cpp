@@ -1,32 +1,24 @@
 #include "Logger.hpp"
 
-Logger::Logger(std::string name):
-    _name(name)
+Logger::Logger(std::string name, LogLevel level):
+    _name(name),
+    _level(level)
+{
+}
+
+Logger::Logger(Logger&& logger):
+    _name(std::move(logger._name)),
+    _level(logger._level)
 {
 }
 
 
-/*
-Class::Class(const Class& c)
+Logger& Logger::operator=(Logger&& logger)
 {
-}
-
-Class::Class(Class&& c)
-{
-}
-
-Class& Class::operator=(const Class& c)
-{
+    _name=std::move(logger._name);
+    _level=logger._level;
     return *this;
 }
 
-Class& Class::operator=(Class&& c)
-{
-    return *this;
-}
 
-Class::~Class()
-{
-}
-*/
 

@@ -26,7 +26,7 @@ struct LogLevel
     {
     }
     
-    const char* toString()
+    const char* toString() const
     {
         return convertLogLevel(_level);
     }
