@@ -5,6 +5,18 @@
 
 struct LogLevel
 {
+    static const std::string maxdebug;
+    static const std::string debug;
+    static const std::string mindebug;
+    static const std::string maxinfo;
+    static const std::string info;
+    static const std::string mininfo;
+    static const std::string flow;
+    static const std::string warning;
+    static const std::string error;
+    static const std::string critical;
+    static const std::string none;
+    
     enum LEVEL
     {
         MAXDEBUG=0,   //full debug
@@ -26,33 +38,33 @@ struct LogLevel
     {
     }
     
-    const char* toString() const
+    const std::string toString() const
     {
         return convertLogLevel(_level);
     }
 
-    static const char* convertLogLevel(const LogLevel::LEVEL& level)
+    static const std::string convertLogLevel(const LogLevel::LEVEL& level)
     {
     	switch (level)
     	{
-    		case LogLevel::MAXDEBUG: return "MAXDEBUG";
-    		case LogLevel::DEBUG: return "DEBUG";
-    		case LogLevel::MINDEBUG: return "MINDEBUG";
-    		case LogLevel::MAXINFO: return "MAXINFO";
-    		case LogLevel::INFO: return "INFO";
-    		case LogLevel::MININFO: return "MININFO";
-    		case LogLevel::FLOW: return "FLOW";
-    		case LogLevel::WARNING: return "WARNING";
-    		case LogLevel::ERROR: return "ERROR";
-    		case LogLevel::CRITICAL: return "CRITICAL";
-    		case LogLevel::NONE: return "NONE";
+    		case LogLevel::MAXDEBUG: return maxdebug;
+    		case LogLevel::DEBUG: return debug;
+    		case LogLevel::MINDEBUG: return mindebug;
+    		case LogLevel::MAXINFO: return maxinfo;
+    		case LogLevel::INFO: return info;
+    		case LogLevel::MININFO: return mininfo;
+    		case LogLevel::FLOW: return flow;
+    		case LogLevel::WARNING: return warning;
+    		case LogLevel::ERROR: return error;
+    		case LogLevel::CRITICAL: return critical;
+    		case LogLevel::NONE: return none;
     		default: return "";
     	}
     	return "";
     }
 };
 
-
+std::ostream& operator<<(std::ostream& stream, const LogLevel& logLevel);
 
 #endif
 
