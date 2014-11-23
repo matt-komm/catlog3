@@ -1,8 +1,9 @@
 #include "Logger.hpp"
 
-Logger::Logger(std::string name, LogLevel level):
+Logger::Logger(std::string name, LogLevel level) noexcept:
     _name(name),
-    _level(level)
+    _level(level),
+    _parent(nullptr)
 {
 }
 

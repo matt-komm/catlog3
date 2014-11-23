@@ -8,34 +8,41 @@
 #include <string>
 #include <utility>
 #include <memory>
-
+#include <type_traits>
 #include <iostream>
 
 class LogRecord
 {
-    protected:
+    public:
         typedef std::vector<std::unique_ptr<GenericType>> MessageParts;
         typedef std::map<std::string,MessageParts> CategorizedMessages;
+    public:
         CategorizedMessages _messages;
     public:
         LogRecord();
-        template<class FIRST,class... ARGS> void processArguments(std::pair<const char*,FIRST> first, ARGS... args)
+        template<class MESSAGE,class... ARGS> void processArguments(const std::pair<const char*,MESSAGE>& pairedMessage, const ARGS&... args)
         {
-            MessageParts& messageList = _messages[first.first];
-            std::unique_ptr<GenericType> genericType(new GenericTypeTmpl<FIRST>(first.second));
-            messageList.push_back(std::move(genericType));
-            processArguments(std::forward<ARGS>(args)...);
+            ///std::cout<<pairedMessage.first<<","<<pairedMessage.second<<std::endl;
+            MessageParts& messageList = _messages[pairedMessage.first];
+            GenericTypeTmpl<MESSAGE>* genericType = new GenericTypeTmpl<MESSAGE>(pairedMessage.second);
+            messageList.emplace_back(genericType);
+            processArguments(args...);
         }
-        template<class FIRST, class... ARGS> void processArguments(FIRST first, ARGS... args)
+        template<class MESSAGE, class... ARGS> void processArguments(const MESSAGE& message, const ARGS&... args)
         {
+            std::cout<<"LogRecord::processArguments<...>(...)"<<std::endl;
+
             MessageParts& messageList = _messages[""];
-            std::unique_ptr<GenericType> genericType(new GenericTypeTmpl<FIRST>(first));
-            messageList.push_back(std::move(genericType));
-            processArguments(std::forward<ARGS>(args)...);
+            GenericTypeTmpl<MESSAGE>* genericType = new GenericTypeTmpl<MESSAGE>(message);
+            messageList.emplace_back(genericType);
+            processArguments(args...);
+            std::cout<<"LogRecord::processArguments<...>(...) <-"<<std::endl;
         }
         
         void processArguments()
         {
+            std::cout<<"LogRecord::processArguments<>()"<<std::endl;
+            /*
             for (CategorizedMessages::const_iterator it = _messages.cbegin(); it != _messages.cend(); ++it)
             {
                 std::cout<<"["<<it->first<<"] : ";
@@ -45,15 +52,26 @@ class LogRecord
                 }
                 std::cout<<std::endl;
             }
-            
+            */
         }
-        /*
-        Class(const Class& c);
-        Class(Class&& c);
-        Class& operator=(const Class& c);
-        Class& operator=(Class&& c);
-        ~Class();
-        */
+
+        inline const CategorizedMessages& getMessages() const
+        {
+            return _messages;
+        }
+
+        LogRecord(const LogRecord& logRecord) = delete;
+        LogRecord(LogRecord&& logRecord):
+            _messages(std::move(logRecord._messages))
+        {
+
+        }
+        LogRecord& operator=(const LogRecord& logRecord) = delete;
+        LogRecord& operator=(LogRecord&& logRecord)
+        {
+            _messages=std::move(logRecord._messages);
+            return *this;
+        }
         
         ~LogRecord()
         {

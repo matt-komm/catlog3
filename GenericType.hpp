@@ -4,6 +4,7 @@
 #include "Formatter.hpp"
 
 #include <string>
+#include <iostream>
 
 class GenericType
 {
@@ -26,17 +27,19 @@ class GenericTypeTmpl:
         GenericTypeTmpl(const TYPE& type):
             _type(type)
         {
+            std::cout<<"GenericTypeTmplRef::create"<<std::endl;
         }
-        
+
         virtual std::string format() const
         {
             std::stringstream ss;
             ss<<_type;
             return std::move(ss.str());
         }
-    
+
         virtual ~GenericTypeTmpl()
         {
+            std::cout<<"GenericTypeTmplRef::destroy"<<std::endl;
         }
 };
 

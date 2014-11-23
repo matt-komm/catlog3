@@ -4,10 +4,10 @@
 #include <cmath>
 #include <iostream>
 #include <time.h>
-
+/*
 #define LOG(logger, level, msg...) \
     logger.log(level,msg , std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__))
-
+*/
 template<class... ARGS> void measure(Logger& logger, const char* name, ARGS... args)
 {
     float mean=0.0;
@@ -30,11 +30,57 @@ template<class... ARGS> void measure(Logger& logger, const char* name, ARGS... a
 	printf("%s: \t%5.4f +- %5.4f\n",name,mean/acuracy,std::sqrt(mean2/acuracy-mean*mean/acuracy/acuracy));
 }
 
+struct Foo
+{
+    std::string _name;
+    Foo(std::string name=""):
+        _name(name)
+    {
+        std::cout<<"foo ("<<_name<<") created: "<<this<<std::endl;
+    }
+    Foo(const Foo& foo):
+        _name(foo._name)
+    {
+        std::cout<<"foo ("<<_name<<") create copy: "<<&foo<<" -> "<<this<<std::endl;
+    }
+
+    Foo(Foo&& foo):
+        _name(std::move(foo._name))
+    {
+        std::cout<<"foo ("<<_name<<") create move: "<<&foo<<" -> "<<this<<std::endl;
+    }
+    Foo& operator=(const Foo& foo)
+    {
+        _name=foo._name;
+        std::cout<<"foo ("<<_name<<") assign copy: "<<&foo<<" -> "<<this<<std::endl;
+        return *this;
+    }
+    Foo& operator=(Foo&& foo)
+    {
+        _name=std::move(foo._name);
+        std::cout<<"foo ("<<_name<<") assign move: "<<&foo<<" -> "<<this<<std::endl;
+        return *this;
+    }
+    ~Foo()
+    {
+        std::cout<<"foo ("<<_name<<") destroyed: "<<this<<std::endl;
+    }
+};
+
+std::ostream& operator<<(std::ostream& stream, const Foo& foo)
+{
+    std::cout<<"foo print: "<<&foo<<std::endl;
+    return stream;
+}
+
 int main()
 {
     Logger& root = LogFactory::get();
-    LOG(root,LogLevel::INFO,"test",342342);
-    root.log(LogLevel::INFO,"test",32342,std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));
+    //std::string bla = "bla";
+    Foo ext("ext");
+    root.log(LogLevel::INFO,"test",342342,std::make_pair("lno",__LINE__));
+    //root.log(LogLevel::INFO,bla);
+    //root.log(LogLevel::INFO,Foo());
     //std::cout<<LogLevel(LogLevel::INFO)<<std::endl;
     /*
     
