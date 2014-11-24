@@ -27,7 +27,7 @@ class Logger
         template<class... ARGS> void log(const LogLevel& logLevel, const ARGS&... args) const
         {   
             //pass by const ref if possible? Howto?
-            std::cout<<"Logger::log"<<std::endl;
+            //std::cout<<"Logger::log"<<std::endl;
 
             if (logLevel._level>=_level._level)
             {
@@ -57,12 +57,12 @@ class Logger
                     _parent->emit(logRecord);
                 }
             }
-            std::cout<<"Logger::log <-"<<std::endl;
+            //std::cout<<"Logger::log <-"<<std::endl;
         }
         
         void emit(const LogRecord& logRecord) const
         {
-            std::cout<<"Logger::emit"<<std::endl;
+            //std::cout<<"Logger::emit"<<std::endl;
             for (LogRecord::CategorizedMessages::const_iterator it = logRecord._messages.cbegin(); it != logRecord._messages.cend(); ++it)
             {
                 std::cout<<"["<<it->first<<"] : ";

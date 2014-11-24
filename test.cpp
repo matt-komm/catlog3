@@ -3,11 +3,21 @@
 
 #include <cmath>
 #include <iostream>
-#include <time.h>
-/*
-#define LOG(logger, level, msg...) \
-    logger.log(level,msg , std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__))
-*/
+//#include <time.h>
+#include <ctime>
+#include <chrono>
+#include <iomanip>
+#include <unistd.h>
+
+
+#define LOG(logger, level, ...) \
+    logger.log( \
+        level, \
+        __VA_ARGS__ , \
+        std::make_pair("lno",__LINE__), \
+        std::make_pair("file",__FILE__) \
+    )
+
 template<class... ARGS> void measure(Logger& logger, const char* name, ARGS... args)
 {
     float mean=0.0;
@@ -76,14 +86,28 @@ std::ostream& operator<<(std::ostream& stream, const Foo& foo)
 int main()
 {
     Logger& root = LogFactory::get();
+    LOG(root,LogLevel::INFO,"test",342342);
     //std::string bla = "bla";
-    Foo ext("ext");
-    root.log(LogLevel::INFO,"test",342342,std::make_pair("lno",__LINE__));
+    //Foo ext("ext");
+    //root.log(LogLevel::INFO,"test",342342,std::make_pair("lno",__LINE__));
     //root.log(LogLevel::INFO,bla);
     //root.log(LogLevel::INFO,Foo());
     //std::cout<<LogLevel(LogLevel::INFO)<<std::endl;
+    for (unsigned int i=0; i<400; ++i)
+    {
+        std::chrono::time_point<std::chrono::system_clock> t = std::chrono::system_clock::now();
+        unsigned long secs = std::chrono::duration_cast<std::chrono::seconds>(t.time_since_epoch()).count();
+        unsigned long msecs = std::chrono::duration_cast<std::chrono::milliseconds>(t.time_since_epoch()).count()-secs*1000;
+        std::cout<<secs<<":"<<msecs<<"\r";
+        std::cout.flush();
+        usleep(40000);
+    }
+    //std::time_t time = std::chrono::system_clock::to_time_t(t);
+    //std::tm localtime = std::
+    //std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
+    //std::cout<<ms<<std::endl;
+    //root.log(LogLevel::INFO,*lt);
     /*
-    
     measure(root,"string1","abcdefg");
     measure(root,"string2","abcdefg","abcdefg");
     measure(root,"string3","abcdefg","abcdefg","abcdefg");
@@ -120,6 +144,7 @@ int main()
     measure(root,"info2",std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));
     measure(root,"info3",std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));   
     */
-    
+
+
     return 0;
 }

@@ -5,6 +5,7 @@
 
 #include <string>
 #include <iostream>
+#include <ctime>
 
 class GenericType
 {
@@ -27,7 +28,7 @@ class GenericTypeTmpl:
         GenericTypeTmpl(const TYPE& type):
             _type(type)
         {
-            std::cout<<"GenericTypeTmplRef::create"<<std::endl;
+            //std::cout<<"GenericTypeTmplRef::create"<<std::endl;
         }
 
         virtual std::string format() const
@@ -39,7 +40,33 @@ class GenericTypeTmpl:
 
         virtual ~GenericTypeTmpl()
         {
-            std::cout<<"GenericTypeTmplRef::destroy"<<std::endl;
+            //std::cout<<"GenericTypeTmplRef::destroy"<<std::endl;
+        }
+};
+
+template<>
+class GenericTypeTmpl<std::tm>:
+    public GenericType
+{
+    protected:
+        const std::tm& _type;
+    public:
+        GenericTypeTmpl(const std::tm& type):
+            _type(type)
+        {
+            //std::cout<<"GenericTypeTmplRef::create"<<std::endl;
+        }
+
+        virtual std::string format() const
+        {
+            std::stringstream ss;
+            ss<<_type.tm_hour<<":"<<_type.tm_min<<":"<<_type.tm_sec;
+            return std::move(ss.str());
+        }
+
+        virtual ~GenericTypeTmpl()
+        {
+            //std::cout<<"GenericTypeTmplRef::destroy"<<std::endl;
         }
 };
 

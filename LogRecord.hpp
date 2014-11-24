@@ -30,18 +30,18 @@ class LogRecord
         }
         template<class MESSAGE, class... ARGS> void processArguments(const MESSAGE& message, const ARGS&... args)
         {
-            std::cout<<"LogRecord::processArguments<...>(...)"<<std::endl;
+            //std::cout<<"LogRecord::processArguments<...>(...)"<<std::endl;
 
             MessageParts& messageList = _messages[""];
             GenericTypeTmpl<MESSAGE>* genericType = new GenericTypeTmpl<MESSAGE>(message);
             messageList.emplace_back(genericType);
             processArguments(args...);
-            std::cout<<"LogRecord::processArguments<...>(...) <-"<<std::endl;
+            //std::cout<<"LogRecord::processArguments<...>(...) <-"<<std::endl;
         }
         
         void processArguments()
         {
-            std::cout<<"LogRecord::processArguments<>()"<<std::endl;
+            //std::cout<<"LogRecord::processArguments<>()"<<std::endl;
             /*
             for (CategorizedMessages::const_iterator it = _messages.cbegin(); it != _messages.cend(); ++it)
             {
