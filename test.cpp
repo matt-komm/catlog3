@@ -1,5 +1,6 @@
 #include "Logger.hpp"
 #include "LogFactory.hpp"
+#include "Time.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -15,7 +16,8 @@
         level, \
         __VA_ARGS__ , \
         std::make_pair("lno",__LINE__), \
-        std::make_pair("file",__FILE__) \
+        std::make_pair("file",__FILE__), \
+        std::make_pair("time",Time::now()) \
     )
 
 template<class... ARGS> void measure(Logger& logger, const char* name, ARGS... args)
@@ -26,7 +28,7 @@ template<class... ARGS> void measure(Logger& logger, const char* name, ARGS... a
 	for (int run=0; run<acuracy; ++run)
 	{
 		clock_t t = clock();
-		for (int i = 0; i < 10000; ++i)
+		for (int i = 0; i < 100000; ++i)
 		{
 			//int g = i*2+std::cos((i%20)*0.1);
 			//g = g + g;
@@ -45,6 +47,7 @@ struct Foo
     std::string _name;
     Foo(std::string name=""):
         _name(name)
+        
     {
         std::cout<<"foo ("<<_name<<") created: "<<this<<std::endl;
     }
@@ -85,6 +88,7 @@ std::ostream& operator<<(std::ostream& stream, const Foo& foo)
 
 int main()
 {
+    
     Logger& root = LogFactory::get();
     LOG(root,LogLevel::INFO,"test",342342);
     //std::string bla = "bla";
@@ -93,21 +97,8 @@ int main()
     //root.log(LogLevel::INFO,bla);
     //root.log(LogLevel::INFO,Foo());
     //std::cout<<LogLevel(LogLevel::INFO)<<std::endl;
-    for (unsigned int i=0; i<400; ++i)
-    {
-        std::chrono::time_point<std::chrono::system_clock> t = std::chrono::system_clock::now();
-        unsigned long secs = std::chrono::duration_cast<std::chrono::seconds>(t.time_since_epoch()).count();
-        unsigned long msecs = std::chrono::duration_cast<std::chrono::milliseconds>(t.time_since_epoch()).count()-secs*1000;
-        std::cout<<secs<<":"<<msecs<<"\r";
-        std::cout.flush();
-        usleep(40000);
-    }
-    //std::time_t time = std::chrono::system_clock::to_time_t(t);
-    //std::tm localtime = std::
-    //std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
-    //std::cout<<ms<<std::endl;
-    //root.log(LogLevel::INFO,*lt);
-    /*
+
+
     measure(root,"string1","abcdefg");
     measure(root,"string2","abcdefg","abcdefg");
     measure(root,"string3","abcdefg","abcdefg","abcdefg");
@@ -143,8 +134,10 @@ int main()
 	measure(root,"info1",std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));
     measure(root,"info2",std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));
     measure(root,"info3",std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));   
-    */
 
+    measure(root,"time1",std::make_pair("time",Time::now()));
+    measure(root,"time2",std::make_pair("time",Time::now()),std::make_pair("time",Time::now()));
+    measure(root,"time3",std::make_pair("time",Time::now()),std::make_pair("time",Time::now()),std::make_pair("time",Time::now()));
 
     return 0;
 }

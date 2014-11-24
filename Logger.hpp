@@ -36,7 +36,7 @@ class Logger
                 //logRecord.processArguments<typename std::add_lvalue_reference<typename std::add_const<ARGS&>::type>::type...>(args...);
                 logRecord.processArguments(args...);
                 //logRecord.processArguments<ARGS...>(args...);
-                this->emit(logRecord);
+                //this->emit(logRecord);
 
                 /*
                 for (LogRecord::CategorizedMessages::const_iterator it = logRecord._messages.cbegin(); it != logRecord._messages.cend(); ++it)
