@@ -28,7 +28,7 @@ template<class... ARGS> void measure(Logger& logger, const char* name, ARGS... a
 	for (int run=0; run<acuracy; ++run)
 	{
 		clock_t t = clock();
-		for (int i = 0; i < 100000; ++i)
+		for (int i = 0; i < 20000; ++i)
 		{
 			//int g = i*2+std::cos((i%20)*0.1);
 			//g = g + g;
@@ -86,11 +86,19 @@ std::ostream& operator<<(std::ostream& stream, const Foo& foo)
     return stream;
 }
 
+template<class ARG> std::pair<const char*,const ARG&> catMsg(const char* key, const ARG& arg)
+    {
+        return std::move(std::pair<const char*,const ARG&>(key,arg));
+    }
+
 int main()
 {
     
-    Logger& root = LogFactory::get();
-    LOG(root,LogLevel::INFO,"test",342342);
+    Logger& root = LogFactory::getLogger();
+    LogFactory::getLogChannel().setLogLevel(LogLevel::ERROR);
+    root.addLogChannel(LogFactory::getLogChannel("bla",LogLevel::INFO));
+    //LOG(root,LogLevel::INFO,catMsg("test",Foo()));
+    //LOG(root,LogLevel::INFO,Foo());
     //std::string bla = "bla";
     //Foo ext("ext");
     //root.log(LogLevel::INFO,"test",342342,std::make_pair("lno",__LINE__));
@@ -125,19 +133,16 @@ int main()
     
  	measure(root,"bool1",true);
     measure(root,"bool2",true,true);
-    measure(root,"bool3",true,true,true);    
+    measure(root,"bool3",true,true,true);
     
- 	measure(root,"bool1",true);
-    measure(root,"bool2",true,true);
-    measure(root,"bool3",true,true,true);     
-    
-	measure(root,"info1",std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));
-    measure(root,"info2",std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));
-    measure(root,"info3",std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__),std::make_pair("lno",__LINE__),std::make_pair("file",__FILE__));   
+    measure(root,"time1",Time::now());
+    measure(root,"time2",Time::now(),Time::now());
+    measure(root,"time3",Time::now(),Time::now(),Time::now());
 
-    measure(root,"time1",std::make_pair("time",Time::now()));
-    measure(root,"time2",std::make_pair("time",Time::now()),std::make_pair("time",Time::now()));
-    measure(root,"time3",std::make_pair("time",Time::now()),std::make_pair("time",Time::now()),std::make_pair("time",Time::now()));
+	measure(root,"info1",std::make_pair("file",__FILE__));
+	measure(root,"info1",std::make_pair("file",__FILE__),std::make_pair("file",__FILE__));
+	measure(root,"info1",std::make_pair("file",__FILE__),std::make_pair("file",__FILE__),std::make_pair("file",__FILE__));
+
 
     return 0;
 }

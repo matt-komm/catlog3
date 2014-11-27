@@ -1,7 +1,6 @@
-#include "LogRecord.hpp"
+#include "LogHandler.hpp"
 
-LogRecord::LogRecord(const LogLevel& level):
-    _level(level)
+LogHandler::LogHandler()
 {
 }
 

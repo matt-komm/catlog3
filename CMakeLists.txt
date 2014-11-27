@@ -11,6 +11,7 @@ add_library(catlog
     LogFactory.cpp
     LogLevel.cpp
     Time.cpp
+    LogChannel.cpp
 )
 
 add_executable(catlog-test

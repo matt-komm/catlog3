@@ -10,7 +10,7 @@ LogFactory& LogFactory::getInstance()
     return logFactory;
 }
 
-Logger& LogFactory::get(std::string name, LogLevel level)
+Logger& LogFactory::getLogger(std::string name, LogLevel level)
 {
     LogFactory& logFactory = getInstance();
     std::unordered_map<std::string,Logger>::iterator foundLogger = logFactory._loggers.find(name);
@@ -20,6 +20,18 @@ Logger& LogFactory::get(std::string name, LogLevel level)
     }
     return (logFactory._loggers.insert(std::make_pair(std::move(name), Logger(name,level))).first)->second;
 }
+
+LogChannel& LogFactory::getLogChannel(std::string name, LogLevel level)
+{
+    LogFactory& logFactory = getInstance();
+    std::unordered_map<std::string,LogChannel>::iterator foundChannel = logFactory._channels.find(name);
+    if (foundChannel!=logFactory._channels.end())
+    {
+        return foundChannel->second;
+    }
+    return (logFactory._channels.insert(std::make_pair(std::move(name), LogChannel(name,level))).first)->second;
+}
+
 
 /*
 Class::Class(const Class& c)
