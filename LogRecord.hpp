@@ -15,8 +15,10 @@
 class LogRecord
 {
     public:
-        typedef std::vector<std::unique_ptr<GenericType>> MessageParts;
+        typedef std::unique_ptr<GenericType> MessagePart;
+        typedef std::vector<MessagePart> MessageParts;
         typedef std::map<std::string,MessageParts> CategorizedMessages;
+        typedef std::pair<std::string,MessageParts> Message;
 
     protected:
         CategorizedMessages _messages;

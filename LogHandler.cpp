@@ -1,6 +1,7 @@
 #include "LogHandler.hpp"
 
-LogHandler::LogHandler()
+LogHandler::LogHandler(const std::string& name, const LogLevel& level):
+    LogChannel(name,level)
 {
 }
 

@@ -1,6 +1,7 @@
 #include "Logger.hpp"
 #include "LogFactory.hpp"
 #include "Time.hpp"
+#include "ConsoleLogHandler.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -95,13 +96,14 @@ int main()
 {
     
     Logger& root = LogFactory::getLogger();
-    LogFactory::getLogChannel().setLogLevel(LogLevel::ERROR);
+    LogFactory::getLogChannel().setLogLevel(LogLevel::INFO);
     root.addLogChannel(LogFactory::getLogChannel("bla",LogLevel::INFO));
+    LogFactory::getLogChannel("bla").addLogChannel(LogFactory::getLogHandler<ConsoleLogHandler>("test",LogLevel::CRITICAL));
     //LOG(root,LogLevel::INFO,catMsg("test",Foo()));
     //LOG(root,LogLevel::INFO,Foo());
     //std::string bla = "bla";
     //Foo ext("ext");
-    //root.log(LogLevel::INFO,"test",342342,std::make_pair("lno",__LINE__));
+    root.log(LogLevel::ERROR,"test",342342,std::make_pair("lno",__LINE__));
     //root.log(LogLevel::INFO,bla);
     //root.log(LogLevel::INFO,Foo());
     //std::cout<<LogLevel(LogLevel::INFO)<<std::endl;

@@ -3,32 +3,19 @@
 #include "LogFactory.hpp"
 
 Logger::Logger(const std::string& name, const LogLevel& level) noexcept:
-    _name(name),
-    _level(level)
+    LogChannel(name,level)
 {
-    _channels.push_back(&LogFactory::getLogChannel(name,level));
 }
 
 Logger::Logger(Logger&& logger):
-    _name(std::move(logger._name)),
-    _level(logger._level)
+    LogChannel(std::move(logger))
 {
 }
 
 
-Logger& Logger::operator=(Logger&& logger)
+Logger& Logger::operator=(Logger&&)
 {
-    _name=std::move(logger._name);
-    _level=logger._level;
     return *this;
-}
-
-void Logger::emit(const LogRecord& logRecord) const
-{
-    for (unsigned int ichannel = 0; ichannel < _channels.size(); ++ichannel)
-    {
-        _channels[ichannel]->propagate(logRecord);
-    }
 }
 
 Logger::~Logger() noexcept
