@@ -46,7 +46,7 @@ class LogChannel
 
                 //record need to be higher than level to get processed
                 //if that is passed it counts if the channels would pick it up
-                return channelLogLevel<_level ? _level : channelLogLevel;
+                return channelLogLevel<_level ? channelLogLevel : _level;
             }
             else
             {

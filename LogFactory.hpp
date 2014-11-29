@@ -29,13 +29,7 @@ class LogFactory
             }
             return *(logFactory._handlers.insert(std::make_pair(std::move(name), new HANDLER(name,level))).first)->second;
         }
-        /*
-        Class(const Class& c);
-        Class(Class&& c);
-        Class& operator=(const Class& c);
-        Class& operator=(Class&& c);
-        ~Class();
-        */
+        ~LogFactory();
 };
 
 #endif

@@ -32,28 +32,19 @@ LogChannel& LogFactory::getLogChannel(std::string name, LogLevel level)
     return *(logFactory._channels.insert(std::make_pair(std::move(name), new LogChannel(name,level))).first)->second;
 }
 
-
-/*
-Class::Class(const Class& c)
+LogFactory::~LogFactory()
 {
+    for (std::unordered_map<std::string,Logger*>::iterator it = _loggers.begin(); it != _loggers.end(); ++it)
+    {
+        delete it->second;
+    }
+    for (std::unordered_map<std::string,LogChannel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+    {
+        delete it->second;
+    }
+    for (std::unordered_map<std::string,LogHandler*>::iterator it = _handlers.begin(); it != _handlers.end(); ++it)
+    {
+        delete it->second;
+    }
 }
-
-Class::Class(Class&& c)
-{
-}
-
-Class& Class::operator=(const Class& c)
-{
-    return *this;
-}
-
-Class& Class::operator=(Class&& c)
-{
-    return *this;
-}
-
-Class::~Class()
-{
-}
-*/
 

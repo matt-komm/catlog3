@@ -98,7 +98,7 @@ int main()
     Logger& root = LogFactory::getLogger();
     LogFactory::getLogChannel().setLogLevel(LogLevel::INFO);
     root.addLogChannel(LogFactory::getLogChannel("bla",LogLevel::INFO));
-    LogFactory::getLogChannel("bla").addLogChannel(LogFactory::getLogHandler<ConsoleLogHandler>("test",LogLevel::CRITICAL));
+    LogFactory::getLogChannel("bla").addLogChannel(LogFactory::getLogHandler<ConsoleLogHandler>("test",LogLevel::INFO));
     //LOG(root,LogLevel::INFO,catMsg("test",Foo()));
     //LOG(root,LogLevel::INFO,Foo());
     //std::string bla = "bla";
@@ -108,6 +108,7 @@ int main()
     //root.log(LogLevel::INFO,Foo());
     //std::cout<<LogLevel(LogLevel::INFO)<<std::endl;
 
+    /*
 
     measure(root,"string1","abcdefg");
     measure(root,"string2","abcdefg","abcdefg");
@@ -145,6 +146,6 @@ int main()
 	measure(root,"info1",std::make_pair("file",__FILE__),std::make_pair("file",__FILE__));
 	measure(root,"info1",std::make_pair("file",__FILE__),std::make_pair("file",__FILE__),std::make_pair("file",__FILE__));
 
-
+    */
     return 0;
 }
