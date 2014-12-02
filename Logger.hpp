@@ -32,7 +32,7 @@ class Logger:
             //pass by const ref if possible? Howto?
             //std::cout<<"Logger::log"<<std::endl;
 
-            if (this->effectiveLevel()<=logLevel)
+            if (this->level()<=logLevel && this->accept(logLevel))
             {
 
                 LogRecord logRecord(logLevel);

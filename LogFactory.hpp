@@ -32,5 +32,18 @@ class LogFactory
         ~LogFactory();
 };
 
+//some helpers to write less code
+inline Logger& logger(std::string name="", LogLevel level=LogLevel::INFO)
+{
+    return LogFactory::getLogger(name,level);
+}
+inline LogChannel& channel(std::string name="", LogLevel level=LogLevel::INFO)
+{
+    return LogFactory::getLogChannel(name,level);
+}
+template<class HANDLER> inline LogHandler& handler(std::string name="", LogLevel level=LogLevel::INFO)
+{
+    return LogFactory::getLogHandler<HANDLER>(name,level);
+}
 #endif
 

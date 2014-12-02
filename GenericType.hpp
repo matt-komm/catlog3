@@ -31,6 +31,12 @@ class GenericTypeTmpl:
             //std::cout<<"GenericTypeTmplRef::create"<<std::endl;
         }
 
+        GenericTypeTmpl<TYPE>& operator=(const TYPE& type)
+        {
+            _type=type;
+            return *this;
+        }
+
         virtual std::string format() const
         {
             std::stringstream ss;

@@ -3,6 +3,7 @@
 
 #include "GenericType.hpp"
 #include "LogLevel.hpp"
+#include "Time.hpp"
 
 #include <map>
 #include <vector>
@@ -11,6 +12,25 @@
 #include <memory>
 #include <type_traits>
 #include <iostream>
+
+
+class LogRecordInfo
+{
+    public:
+        /*
+        const GenericTypeTmpl<Time> timeStamp;
+        const GenericTypeTmpl<long> lno;
+        const GenericTypeTmpl<const char*> fileName;
+        const GenericTypeTmpl<const char*> className;
+        const GenericTypeTmpl<const char*> functionName;
+        const GenericTypeTmpl<std::thread::id> threadId;
+         */
+        LogRecordInfo()
+        {
+
+        }
+
+};
 
 class LogRecord
 {
@@ -22,11 +42,18 @@ class LogRecord
 
     protected:
         CategorizedMessages _messages;
+
         LogLevel _level;
+        LogRecordInfo _info;
+
     public:
         inline const LogLevel& level() const
         {
             return _level;
+        }
+        inline const LogRecordInfo& info() const
+        {
+            return _info;
         }
 
         LogRecord(const LogLevel& level);

@@ -95,20 +95,15 @@ template<class ARG> std::pair<const char*,const ARG&> catMsg(const char* key, co
 int main()
 {
     
-    Logger& root = LogFactory::getLogger();
-    LogFactory::getLogChannel().setLogLevel(LogLevel::INFO);
-    root.addLogChannel(LogFactory::getLogChannel("bla",LogLevel::INFO));
-    LogFactory::getLogChannel("bla").addLogChannel(LogFactory::getLogHandler<ConsoleLogHandler>("test",LogLevel::INFO));
-    //LOG(root,LogLevel::INFO,catMsg("test",Foo()));
-    //LOG(root,LogLevel::INFO,Foo());
-    //std::string bla = "bla";
-    //Foo ext("ext");
-    root.log(LogLevel::ERROR,"test",342342,std::make_pair("lno",__LINE__));
+    Logger& root = LogFactory::getLogger("",LogLevel::DEBUG);
+    root>>channel("bla",LogLevel::INFO)>>handler<ConsoleLogHandler>("handler",LogLevel::ERROR);
+
+    root.log(LogLevel::DEBUG,"test",342342,std::make_pair("lno",__LINE__));
     //root.log(LogLevel::INFO,bla);
     //root.log(LogLevel::INFO,Foo());
     //std::cout<<LogLevel(LogLevel::INFO)<<std::endl;
 
-    /*
+
 
     measure(root,"string1","abcdefg");
     measure(root,"string2","abcdefg","abcdefg");
@@ -146,6 +141,6 @@ int main()
 	measure(root,"info1",std::make_pair("file",__FILE__),std::make_pair("file",__FILE__));
 	measure(root,"info1",std::make_pair("file",__FILE__),std::make_pair("file",__FILE__),std::make_pair("file",__FILE__));
 
-    */
+
     return 0;
 }

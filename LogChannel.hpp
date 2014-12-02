@@ -34,25 +34,33 @@ class LogChannel
         {
             return _name;
         }
+
+        inline unsigned int nChannels() const
+        {
+            return _channels.size();
+        }
+
+        virtual bool accept(const LogLevel& level) const
+        {
+            for (unsigned int ichannel=0; ichannel<_channels.size(); ++ichannel)
+            {
+                if (_channels[ichannel]->level()>level)
+                {
+                    break;
+                }
+                if (_channels[ichannel]->accept(level))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         inline const LogLevel& level() const
         {
             return _level;
         }
-        inline const LogLevel& effectiveLevel() const
-        {
-            if (_channels.size()>0)
-            {
-                const LogLevel& channelLogLevel = _channels.front()->effectiveLevel();
 
-                //record need to be higher than level to get processed
-                //if that is passed it counts if the channels would pick it up
-                return channelLogLevel<_level ? channelLogLevel : _level;
-            }
-            else
-            {
-                return _level;
-            }
-        }
         inline void setLogLevel(const LogLevel& logLevel)
         {
             _level=logLevel;
@@ -62,6 +70,12 @@ class LogChannel
         {
             _channels.push_back(&channel);
             std::stable_sort(_channels.begin(),_channels.end(),[](const LogChannel* c1, const LogChannel* c2){return c1->level()<c2->level();});
+        }
+
+        LogChannel& operator>>(LogChannel& logChannel)
+        {
+            this->addLogChannel(logChannel);
+            return logChannel;
         }
 
         virtual void propagate(const LogRecord& logRecord) const;

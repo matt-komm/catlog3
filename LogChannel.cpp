@@ -29,11 +29,16 @@ LogChannel& LogChannel::operator=(LogChannel&& logChannel)
 
 void LogChannel::propagate(const LogRecord& logRecord) const
 {
-    if (this->effectiveLevel()<=logRecord.level())
+    for (unsigned int ichannel = 0; ichannel < _channels.size(); ++ichannel)
     {
-        for (unsigned int ichannel = 0; ichannel < _channels.size(); ++ichannel)
+        if (_channels[ichannel]->level()<=logRecord.level())
         {
             _channels[ichannel]->propagate(logRecord);
+        }
+        else
+        {
+            //channels are sortecd -> all next channels have a higher level
+            break;
         }
     }
 }

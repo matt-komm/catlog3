@@ -34,7 +34,7 @@ class ConsoleLogHandler:
 
                 ss<<std::endl;
             }
-            std::cout<<ss.str().c_str();
+            //std::cout<<ss.str().c_str();
 
         }
         /*
