@@ -7,15 +7,28 @@
 #include "LogLevel.hpp"
 
 #include <unordered_map>
+#include <mutex>
 
 class LogFactory
 {
     protected:
+        std::mutex _mutex;
+
         std::unordered_map<std::string,Logger*> _loggers;
         std::unordered_map<std::string,LogChannel*> _channels;
         std::unordered_map<std::string,LogHandler*> _handlers;
+
         LogFactory();
     public:
+        inline void lock()
+        {
+            _mutex.lock();
+        }
+
+        inline void unlock()
+        {
+            _mutex.unlock();
+        }
         static LogFactory& getInstance();
         static Logger& getLogger(std::string name="", LogLevel level=LogLevel::INFO);
         static LogChannel& getLogChannel(std::string name="", LogLevel level=LogLevel::INFO);

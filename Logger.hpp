@@ -25,41 +25,56 @@ class Logger:
         Logger(const std::string& name, const LogLevel& level) noexcept;
 
     public:
-
-
+        template<class... ARGS> void maxdebug(const ARGS&... args) const
+        {
+            this->log(LogLevel::MAXDEBUG,args...);
+        }
+        template<class... ARGS> void debug(const ARGS&... args) const
+        {
+            this->log(LogLevel::DEBUG,args...);
+        }
+        template<class... ARGS> void mindebug(const ARGS&... args) const
+        {
+            this->log(LogLevel::MINDEBUG,args...);
+        }
+        template<class... ARGS> void maxinfo(const ARGS&... args) const
+        {
+            this->log(LogLevel::MAXINFO,args...);
+        }
+        template<class... ARGS> void info(const ARGS&... args) const
+        {
+            this->log(LogLevel::INFO,args...);
+        }
+        template<class... ARGS> void mininfo(const ARGS&... args) const
+        {
+            this->log(LogLevel::MININFO,args...);
+        }
+        template<class... ARGS> void flow(const ARGS&... args) const
+        {
+            this->log(LogLevel::FLOW,args...);
+        }
+        template<class... ARGS> void warning(const ARGS&... args) const
+        {
+            this->log(LogLevel::WARNING,args...);
+        }
+        template<class... ARGS> void error(const ARGS&... args) const
+        {
+            this->log(LogLevel::ERROR,args...);
+        }
+        template<class... ARGS> void critical(const ARGS&... args) const
+        {
+            this->log(LogLevel::CRITICAL,args...);
+        }
         template<class... ARGS> void log(const LogLevel& logLevel, const ARGS&... args) const
         {   
-            //pass by const ref if possible? Howto?
-            //std::cout<<"Logger::log"<<std::endl;
-
             if (this->level()<=logLevel && this->accept(logLevel))
             {
-
                 LogRecord logRecord(logLevel);
-                //logRecord.processArguments(std::make_pair("loglevel",logLevel),std::forward<ARGS>(args)...);
-                //logRecord.processArguments<typename std::add_lvalue_reference<typename std::add_const<ARGS&>::type>::type...>(args...);
                 logRecord.processArguments(args...);
                 this->propagate(logRecord);
-                //logRecord.processArguments<ARGS...>(args...);
-                //this->emit(logRecord);
-
-                /*
-                for (LogRecord::CategorizedMessages::const_iterator it = logRecord._messages.cbegin(); it != logRecord._messages.cend(); ++it)
-                {
-                    std::cout<<"["<<it->first<<"] : ";
-                    for (const std::unique_ptr<GenericType>& m: it->second)
-                    {
-                        std::cout<<m->format()<<" ";
-                    }
-                    std::cout<<std::endl;
-                }
-                */
             }
-            //std::cout<<"Logger::log <-"<<std::endl;
         }
 
-
-        //do not allow copies only moves
         Logger(const Logger& c) = delete;
         Logger(Logger&& c);
         Logger& operator=(const Logger& c) = delete;
