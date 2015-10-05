@@ -31,20 +31,13 @@ class ConsoleLogHandler:
             return _formatter;
         }
         
-        virtual void handle(const LogLevel& level, const std::string& category, const GenericType& message) const
-        {
-        }
-        virtual void emit(const LogLevel& level) const
-        {
-        }
-        
         virtual void handle(const LogRecord& logRecord) const
         {
             std::stringstream ss;
             const LogRecord::CategorizedMessages& catmsg = logRecord.getMessages();
             for (LogRecord::CategorizedMessages::const_iterator it = catmsg.cbegin(); it != catmsg.cend(); ++it)
             {
-                ss<<"["<<it->first<<"] ";
+                ss<<logRecord.level().toString()<<" ["<<it->first<<"] ";
 
                 for (LogRecord::MessageParts::const_iterator m = it->second.cbegin(); m != it->second.cend(); ++m)
                 {
@@ -56,13 +49,6 @@ class ConsoleLogHandler:
             std::cout<<ss.str().c_str();
 
         }
-        /*
-        Class(const Class& c);
-        Class(Class&& c);
-        Class& operator=(const Class& c);
-        Class& operator=(Class&& c);
-        ~Class();
-        */
 };
 
 #endif

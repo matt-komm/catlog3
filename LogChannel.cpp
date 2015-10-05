@@ -43,21 +43,6 @@ void LogChannel::propagate(const LogRecord& logRecord) const
     }
 }
 
-void LogChannel::emit(const LogLevel& level) const
-{
-    for (unsigned int ichannel = 0; ichannel < _channels.size(); ++ichannel)
-    {
-        if (_channels[ichannel]->level()<=level)
-        {
-            _channels[ichannel]->emit(level);
-        }
-        else
-        {
-            //channels are sorted -> all next channels have a higher level
-            break;
-        }
-    }
-}
 
 
 LogChannel::~LogChannel() noexcept

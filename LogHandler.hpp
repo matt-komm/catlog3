@@ -14,8 +14,6 @@ class LogHandler:
         LogHandler(const std::string& name, const LogLevel& level);
     public:
         virtual void handle(const LogRecord& logRecord) const = 0;
-        virtual void handle(const LogLevel& level, const std::string& category, const GenericType& message) const = 0;
-        virtual void emit(const LogLevel& level) const = 0;
         virtual bool accept(const LogLevel& level) const
         {
             return _level<=level;

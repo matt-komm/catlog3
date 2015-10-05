@@ -9,7 +9,6 @@ LogRecord::LogRecord(const Logger* logger,  const LogLevel& level):
 
 void LogRecord::processAndPropagate()
 {
-    //std::cout<<"finished processing"<<std::endl;
     _logger->propagate(*this);
 }
 
