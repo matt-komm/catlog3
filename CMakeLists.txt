@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
 
 project (catlog)
-set(CMAKE_CXX_FLAGS "-Wextra -Wall -pedantic -std=c++0x")
+set(CMAKE_CXX_FLAGS "-Wextra -Wall -Wno-unused-parameter -pedantic -std=c++0x")
 
 include_directories(${CMAKE_PROJECT_SOURCE_DIR})
 

@@ -79,6 +79,7 @@ class LogChannel
         }
 
         virtual void propagate(const LogRecord& logRecord) const;
+        virtual void emit(const LogLevel& level) const;
 
         virtual ~LogChannel() noexcept;
 };

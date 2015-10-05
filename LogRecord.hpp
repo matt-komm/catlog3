@@ -12,30 +12,27 @@
 #include <memory>
 #include <type_traits>
 #include <iostream>
+#include <functional>
+#include <thread>
 
-
-class LogRecordInfo
+struct LogRecordInfo
 {
-    public:
-        /*
-        const GenericTypeTmpl<Time> timeStamp;
-        const GenericTypeTmpl<long> lno;
-        const GenericTypeTmpl<const char*> fileName;
-        const GenericTypeTmpl<const char*> className;
-        const GenericTypeTmpl<const char*> functionName;
-        const GenericTypeTmpl<std::thread::id> threadId;
-         */
-        LogRecordInfo()
-        {
-
-        }
-
+    const GenericTypeTmpl<Time> timeStamp;
+    const GenericTypeTmpl<std::thread::id> threadId;
+    
+    LogRecordInfo():
+        timeStamp(Time::now()),
+        threadId(std::this_thread::get_id())
+    {
+    }
 };
+
+class Logger;
 
 class LogRecord
 {
     public:
-        typedef std::unique_ptr<GenericType> MessagePart;
+        typedef std::reference_wrapper<const GenericType> MessagePart;
         typedef std::vector<MessagePart> MessageParts;
         typedef std::map<std::string,MessageParts> CategorizedMessages;
         typedef std::pair<std::string,MessageParts> Message;
@@ -43,8 +40,9 @@ class LogRecord
     protected:
         CategorizedMessages _messages;
 
-        LogLevel _level;
         LogRecordInfo _info;
+        const Logger* _logger;
+        LogLevel _level;
 
     public:
         inline const LogLevel& level() const
@@ -56,25 +54,24 @@ class LogRecord
             return _info;
         }
 
-        LogRecord(const LogLevel& level);
-        template<class MESSAGE,class... ARGS> void processArguments(const std::pair<const char*,MESSAGE>& pairedMessage, const ARGS&... args)
+        LogRecord(const Logger* logger, const LogLevel& level);
+        
+        template<class MESSAGE,class... ARGS> inline void processAndPropagate(const std::pair<const char*,MESSAGE>& pairedMessage, const ARGS&... args)
         {
             MessageParts& messageList = _messages[pairedMessage.first];
-            GenericTypeTmpl<MESSAGE>* genericType = new GenericTypeTmpl<MESSAGE>(pairedMessage.second);
+            GenericTypeTmpl<MESSAGE> genericType(pairedMessage.second);
             messageList.emplace_back(genericType);
-            processArguments(args...);
-        }
-        template<class MESSAGE, class... ARGS> void processArguments(const MESSAGE& message, const ARGS&... args)
-        {
-            MessageParts& messageList = _messages[""];
-            GenericTypeTmpl<MESSAGE>* genericType = new GenericTypeTmpl<MESSAGE>(message);
-            messageList.emplace_back(genericType);
-            processArguments(args...);
+            processAndPropagate(args...);
         }
         
-        void processArguments()
+        template<class MESSAGE, class... ARGS> inline void processAndPropagate(const MESSAGE& message, const ARGS&... args)
         {
+            const GenericTypeTmpl<MESSAGE> genericType(message);
+            _messages[""].emplace_back(genericType);
+            processAndPropagate(args...);
         }
+        
+        void processAndPropagate();
 
         inline const CategorizedMessages& getMessages() const
         {

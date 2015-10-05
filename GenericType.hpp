@@ -10,7 +10,7 @@
 class GenericType
 {
     public:
-        virtual std::string format() const = 0;
+        virtual std::string format(const Formatter& formatter) const = 0;
     
         virtual ~GenericType()
         {
@@ -28,7 +28,6 @@ class GenericTypeTmpl:
         GenericTypeTmpl(const TYPE& type):
             _type(type)
         {
-            //std::cout<<"GenericTypeTmplRef::create"<<std::endl;
         }
 
         GenericTypeTmpl<TYPE>& operator=(const TYPE& type)
@@ -37,43 +36,15 @@ class GenericTypeTmpl:
             return *this;
         }
 
-        virtual std::string format() const
+        virtual std::string format(const Formatter& formatter) const
         {
-            std::stringstream ss;
-            ss<<_type;
-            return std::move(ss.str());
+            return std::move(formatter.format(_type));
         }
 
         virtual ~GenericTypeTmpl()
         {
-            //std::cout<<"GenericTypeTmplRef::destroy"<<std::endl;
         }
 };
 
-template<>
-class GenericTypeTmpl<std::tm>:
-    public GenericType
-{
-    protected:
-        const std::tm& _type;
-    public:
-        GenericTypeTmpl(const std::tm& type):
-            _type(type)
-        {
-            //std::cout<<"GenericTypeTmplRef::create"<<std::endl;
-        }
-
-        virtual std::string format() const
-        {
-            std::stringstream ss;
-            ss<<_type.tm_hour<<":"<<_type.tm_min<<":"<<_type.tm_sec;
-            return std::move(ss.str());
-        }
-
-        virtual ~GenericTypeTmpl()
-        {
-            //std::cout<<"GenericTypeTmplRef::destroy"<<std::endl;
-        }
-};
 
 #endif

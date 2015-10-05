@@ -69,9 +69,8 @@ class Logger:
         {   
             if (this->level()<=logLevel && this->accept(logLevel))
             {
-                LogRecord logRecord(logLevel);
-                logRecord.processArguments(args...);
-                this->propagate(logRecord);
+                LogRecord logRecord(this,logLevel);
+                logRecord.processAndPropagate(args...);
             }
         }
 

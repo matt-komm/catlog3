@@ -1,31 +1,31 @@
 #ifndef __FORMATTER_H__
 #define __FORMATTER_H__
 
-#include "LogLevel.hpp"
-
 #include <string>
 #include <sstream>
+#include <typeinfo>
 
 class Formatter
 {
     protected:
     public:
-
+    
+        template<class TYPE> std::string format(const TYPE& type) const
+        {
+            std::stringstream ss;
+            ss<<type<<" ("<<typeid(TYPE).name()<<")";
+            return std::move(ss.str());
+        }
         
-        /*
-        Class(const Class& c);
-        Class(Class&& c);
-        Class& operator=(const Class& c);
-        Class& operator=(Class&& c);
-        ~Class();
-        */
+        std::string format(const int& type) const
+        {
+            std::stringstream ss;
+            ss<<"inter";
+            return std::move(ss.str());
+        }
+        
 };
 
-/*
-template<> std::string Formatter::format(LogLevel logLevel)
-{
-    return logLevel.toString();
-}*/
 
 
 #endif

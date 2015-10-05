@@ -1,8 +1,16 @@
 #include "LogRecord.hpp"
+#include "Logger.hpp"
 
-LogRecord::LogRecord(const LogLevel& level):
+LogRecord::LogRecord(const Logger* logger,  const LogLevel& level):
+    _logger(logger),
     _level(level)
 {
+}
+
+void LogRecord::processAndPropagate()
+{
+    //std::cout<<"finished processing"<<std::endl;
+    _logger->propagate(*this);
 }
 
 /*
